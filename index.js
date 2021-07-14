@@ -3,28 +3,27 @@
 //get poke type based on pokemon name
 const fs = require('fs');
 const fetch = require('node-fetch');
+const prompt = require('prompt-async')
 // node "index.js" pokemon.txt
 
-//process.args -- allow to mess with cmd
- var pokemonFileInput = process.argv[2];
- //var pokemonTypeOutput =
+ var PokemonTextFile = process.argv[2]
+
 
 // from nick's file - TEMP -
-// const pokemonArr = function(filePath) {
-//   return new Promise(function(resolve, reject){
-//     fs.readFile(filePath, 'utf8', (err, data) =>{
-//       if (err) {
-//         reject (err);
-//       }else{
-//         const textToLines = data.split(/\r?\n/);
-//         resolve(textToLines)
-//     }
-//     })
-//   })
-//   }
+const pokemonArrReadFile = function(filePath) {
+fs.readFile(__dirname + '/' + PokemonTextFile, 'utf8', (err, data) =>{
+  console.log(data)
+const textToLines = data.split(/\r?\n/);
+})
+}
+
+pokemonArrReadFile(PokemonTextFile)
+
+
+
 
 //test input. This should be the function that filters the .txt file
-let pokemonArr = ['ditto','charizard'];
+
 
 //feeding in pokemon array to fiter fetch
 let requests = pokemonArr.map(pokemon => fetch(`https://pokeapi.co/api/v2/pokemon/${pokemon}`));
