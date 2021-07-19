@@ -1,30 +1,44 @@
 //input is a .txt file
 //command line tool
 //get poke type based on pokemon name
+const { doesNotMatch } = require('assert');
 const fs = require('fs');
 const fetch = require('node-fetch');
-const prompt = require('prompt-async')
+//const prompt = require('prompt-async')
 // node "index.js" pokemon.txt
 
- var PokemonTextFile = process.argv[2]
-
+ const filePath = process.argv[2]
+ var pokemonArr = [];
 
 // from nick's file - TEMP -
-const pokemonArrReadFile = function(filePath) {
-fs.readFile(__dirname + '/' + PokemonTextFile, 'utf8', (err, data) =>{
-  console.log(data)
-const textToLines = data.split(/\r?\n/);
-})
+//const pokemonArr = fs.readFileSync(__dirname + '/' + filePath,'utf-8').split('\n');
+
+/*const pokemonArrReadFile = function(filePath,inputArray) { 
+fs.readFile(__dirname + '/' + filePath, function(err, data) {
+    if(err) throw err;
+    var array = data.toString().split("\n");
+    for(let i = 0; i <array.length; i++) {
+        inputArray.push(array[i])
+    }
+    done();
+});
+}
+*/
+
+function pokemonArrReadFile (callback) {
+  fs.readFile(`./${filePath}`, 'utf-8',function (err, content) {
+      if (err) return callback(err)
+      callback(null, content)
+  })
 }
 
-pokemonArrReadFile(PokemonTextFile)
+pokemonArrReadFile(function (err, content) {
+  console.log(content)
+  pokemonArr.push(content)
+})
 
 
-
-
-//test input. This should be the function that filters the .txt file
-
-
+console.log(pokemonArr)
 //feeding in pokemon array to fiter fetch
 let requests = pokemonArr.map(pokemon => fetch(`https://pokeapi.co/api/v2/pokemon/${pokemon}`));
 
