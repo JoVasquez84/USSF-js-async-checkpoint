@@ -8,39 +8,21 @@ const fetch = require('node-fetch');
 // node "index.js" pokemon.txt
 
  const filePath = process.argv[2]
- var pokemonArr = [];
 
-// from nick's file - TEMP -
-//const pokemonArr = fs.readFileSync(__dirname + '/' + filePath,'utf-8').split('\n');
-
-/*const pokemonArrReadFile = function(filePath,inputArray) { 
-fs.readFile(__dirname + '/' + filePath, function(err, data) {
-    if(err) throw err;
-    var array = data.toString().split("\n");
-    for(let i = 0; i <array.length; i++) {
-        inputArray.push(array[i])
-    }
-    done();
-});
-}
-*/
-
-function pokemonArrReadFile (callback) {
-  fs.readFile(`./${filePath}`, 'utf-8',function (err, content) {
-      if (err) return callback(err)
-      callback(null, content)
-  })
+  try {
+    var data = fs.readFileSync(`./${filePath}`,'utf-8');
+    var pokemonArr=data.split('\n')
+} catch(e) {
+    console.log('Error:', e.stack);
 }
 
-pokemonArrReadFile(function (err, content) {
-  console.log(content)
-  pokemonArr.push(content)
-})
-
+  
 
 console.log(pokemonArr)
+
 //feeding in pokemon array to fiter fetch
 let requests = pokemonArr.map(pokemon => fetch(`https://pokeapi.co/api/v2/pokemon/${pokemon}`));
+console.log(requests)
 
 //requests will be an array of promises to execute fetch requests for each name
 
@@ -55,14 +37,15 @@ Promise.all(requests)
       if ( j === pokemons[i].types.length -1){
         acc.type.push(pokemons[i].types[j].type.name)
         newString += `${acc.name}: ${acc.type}`
-      } else {
+        fs.appendFile('./pokemonOutput.txt',newString + '\n',(err) => {
+          if (err) throw err;
+          console.log('file has been saved')
+      })} else {
         acc.type.push(pokemons[i].types[j].type.name)
       }
     }
-    return newString;
   }
 })
-.then(data => console.log(data))
 .catch(error => console.error(error))
 
 
@@ -74,18 +57,4 @@ Promise.all(requests)
 //   }
 // }
 
-// tempFunction(pokemonFileInput)
 
-
-// let testfunc = function (pokemon){
-//   return new promise(resolve => {
-//     fetch(`https://pokeapi.co/api/v2/pokemon/${pokemon}`)
-//   .then(data => data.json())
-//   .then(type => type.types.forEach((element) =>{console.log(element.type.name)}))
-//   .catch(error => console.error(error))
-//   })
-//   fetch(`https://pokeapi.co/api/v2/pokemon/${pokemon}`)
-//   .then(data => data.json())
-//   .then(type => type.types.forEach((element) =>{console.log(element.type.name)}))
-//   .catch(error => console.error(error))
-//   }
