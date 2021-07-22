@@ -8,6 +8,7 @@ const fetch = require('node-fetch');
 // node "index.js" pokemon.txt
 
  const filePath = process.argv[2]
+ const fileOutput= process.argv[3]
 
   try {
     var data = fs.readFileSync(`./${filePath}`,'utf-8');
@@ -37,7 +38,7 @@ Promise.all(requests)
       if ( j === pokemons[i].types.length -1){
         acc.type.push(pokemons[i].types[j].type.name)
         newString += `${acc.name}: ${acc.type}`
-        fs.appendFile('./pokemonOutput.txt',newString + '\n',(err) => {
+        fs.appendFile(`./${fileOutput}`,newString + '\n',(err) => {
           if (err) throw err;
           console.log('file has been saved')
       })} else {
